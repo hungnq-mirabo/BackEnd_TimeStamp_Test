@@ -8,8 +8,11 @@
     "words",
     "freecodecamp"
   ],
+  "license": "ISC",
+  "version": "1.0.0",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "moment": "2.10.2"
   },
   "main": "server.js",
   "scripts": {
