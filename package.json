@@ -1,6 +1,13 @@
 {
   "name": "fcc-learn-npm-package-json",
   "author": "foobar",
+  "description": "npm-starter",
+  "keywords": [
+    "descriptive",
+    "related",
+    "words",
+    "freecodecamp"
+  ],
   "dependencies": {
     "express": "^4.17.1"
   },
