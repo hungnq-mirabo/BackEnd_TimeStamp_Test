@@ -33,13 +33,16 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-app.use("/api/timestamp/2015-12-25",(req, res) => {
-  res.send({"unix": 1451001600000,"utc": "Fri, 25 Dec 2015 00:00:00 GMT"});
+app.use("/api/timestamp/:date?",(req, res) => {
+  var date = req.params.date;
+  res.send({"utc": date});
 })
 
-app.use("/api/timestamp/1451001600000",(req, res) => {
-  var time = new Date().toString();
-  res.send({"unix": 1451001600000,"utc": "Fri, 25 Dec 2015 00:00:00 GMT"});
+app.use("/api/timestamp/1451001600000",(err, req, res) => {
+  var date_string = req.timestamp;
+  var convertedString = new Date(date_string);
+  if (date_string) return {error : "Invalid Date"};
+  res.send({"unix": date_string,"utc": convertedString});
 })
 
 
