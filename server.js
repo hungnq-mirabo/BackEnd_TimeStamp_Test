@@ -33,36 +33,42 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-app.use("/api/timestamp/:date?",(req, res) => {
-  var date = req.params.date;
-  res.send({"utc": date});
+var express=require("express");
+var path=require("path")
+var app = express()
+const MonthChoice=['January','February','Month','April','May','June','July','August','September','October','November','December']
+app.use('/assets',express.static('assets'))
+
+
+app.get('/:parsed', function (req, res) {
+  
+  if (isNaN(req.params.parsed)) {
+    const time=new Date(req.params.parsed)
+    if (typeof time=='number') {
+      res.json({
+        unix: time/1000,
+        natural:MonthChoice[time.getMonth()]+' '+time.getDate()+', '+time.getFullYear()
+    })
+    } else {
+      res.json({
+        unix: null,
+        time: null
+      })
+    }
+  } else {
+    const d = new Date(req.params.parsed*1000)
+    res.json({
+      unix: req.params.parsed,
+      natural: MonthChoice[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()
+    })
+  }
+  console.log(req.url)
 })
 
-app.use("/api/timestamp/1451001600000",(err, req, res) => {
-  var date_string = req.timestamp;
-  var convertedString = new Date(date_string);
-  console.log(date_string, convertedString);  
-  if (date_string) return {error : "Invalid Date"};
-  res.send({"unix": date_string,"utc": convertedString});
+app.get('/',function(req,res) {
+    console.log(req.url)
+    res.sendFile(path.join(__dirname+'/index.html'))
+    
 })
 
-
-// Respond not found to all the wrong routes
-app.use((req, res, next) => {
-  res.status(404);
-  res.type('txt').send('Not found');
-});
-
-// Error Middleware
-app.use((err, req, res, next) => {
-  if(err) {
-    res.status(err.status || 500)
-      .type('txt')
-      .send(err.message || 'SERVER ERROR');
-  }  
-})
-
-app.listen(process.env.PORT, function () {
-  console.log('Node.js listening ...');
-});
-
+app.listen(process.env.PORT || 8080)
