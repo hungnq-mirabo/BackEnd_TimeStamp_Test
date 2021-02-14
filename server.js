@@ -33,7 +33,14 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-app.use("/api/timestamp/2015-12-25",)
+app.use("/api/timestamp/2015-12-25",(req, res) => {
+  res.send({"unix": 1451001600000,"utc": "Fri, 25 Dec 2015 00:00:00 GMT"});
+})
+
+app.use("/api/timestamp/1451001600000",(req, res) => {
+  var time = new Date().toString();
+  res.send({"unix": 1451001600000,"utc": "Fri, 25 Dec 2015 00:00:00 GMT"});
+})
 
 
 // Respond not found to all the wrong routes
