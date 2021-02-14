@@ -41,6 +41,7 @@ app.use("/api/timestamp/:date?",(req, res) => {
 app.use("/api/timestamp/1451001600000",(err, req, res) => {
   var date_string = req.timestamp;
   var convertedString = new Date(date_string);
+  console.log(date_string, convertedString);  
   if (date_string) return {error : "Invalid Date"};
   res.send({"unix": date_string,"utc": convertedString});
 })
