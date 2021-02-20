@@ -12,25 +12,27 @@ app.route('/')
 
 app.use('/assets',express.static('assets'))
 
-var str = '1451001600000';
+
 var i = new Date().toUTCString();
 var a = "05 October 2011"
 var b = "1317772800000"
-b = parseInt(b)
-var t = new Date(b)
-console.log(t)
-//console.log(t.valueOf(t))
-//console.log(Date.parse("05 October 2011"))
-//console.log(i)
+// If str is date_string => Date.parse(str)
+// IF str is sate_unix => parseInt(str)
 
 app.get('/api/timestamp/:date_string', (req, res) => {
   var a = req.params.date_string;
-  let regex_date = /^(\d{4})-(\d{2})-()/;
+  let regex_date = /^(\d{4})-(\d{2})-(\d{2})/;
   let regex_unix = /\d{4,}/;
-  let unix = "dsdf";
-  console.log(a, typeof a)
-  //var date = new Date(Date.parse(a))
-  //res.json(date)
+  if (regex_date.test(a)) {
+    let date_Unix = Date.parse(a);
+    let date_UTC = new Date(date_Unix).toUTCString();
+    res.json({"unix":date_Unix,"utc":date_UTC})
+  }
+  if (regex_unix.test(a)) {
+    let date_Unix = parseInt(a);
+    let date_UTC = new Date(date_Unix).toUTCString();  
+    res.json({"unix":date_Unix,"utc":date_UTC})
+  }
 })
 
 app.listen(process.env.PORT || 8080)
