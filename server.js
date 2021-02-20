@@ -12,14 +12,12 @@ app.route('/')
 
 app.use('/assets',express.static('assets'))
 
-var a = new Date("2015-10-10")
-console.log(a)
-
 app.get('/api/timestamp/', (req, res) => {
-  let today = new Date()
+/*  let today = new Date()
   let date_UTC = today.toUTCString();
   let date_Unix = today.valueOf();
-  res.json({"unix":date_Unix,"utc":date_UTC})
+  res.json({"unix":date_Unix,"utc":date_UTC}) */
+  res.json({ unix: Date.now(), utc: Date() });
 })
 
 // If str is date_string => Date.parse(str)
@@ -28,7 +26,6 @@ app.get('/api/timestamp/', (req, res) => {
 
 app.get('/api/timestamp/:date_string', (req, res) => {
   var date_string = req.params.date_string;
-
   let regex_date = /^(\d{4})-(\d{2})-(\d{2})/;
   let regex_unix = /\d{5,}/;
   
@@ -36,16 +33,18 @@ app.get('/api/timestamp/:date_string', (req, res) => {
     let date_Unix = parseInt(date_string);
     let date_UTC = new Date(date_Unix).toUTCString();  
     res.json({"unix":date_Unix,"utc":date_UTC})
-  } else {
-    
-  }
-  else if (regex_date.test(date_string)) {
-    let date_Unix = Date.parse(date_string);
-    let date_UTC = new Date(date_Unix).toUTCString();
-    res.json({"unix":date_Unix,"utc":date_UTC})
-  }
+  } 
   else {
-    res.json({ error : "Invalid Date" })
+    let date = new Date(date_string)
+    console.log(date.toString() === "Invalid Date")
+    if (date.toString() !== "Invalid Date") {
+      let date_Unix = date.valueOf();
+      let date_UTC = date.toUTCString();
+      res.json({"unix":date_Unix,"utc":date_UTC})
+    }
+    else {
+      res.json({ error : "Invalid Date" })
+    }
   }
 })
 
