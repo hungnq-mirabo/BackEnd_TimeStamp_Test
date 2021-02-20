@@ -14,16 +14,16 @@ app.use('/assets',express.static('assets'))
 
 var str = '1451001600000';
 var i = new Date().toUTCString();
-var a = new Date(Date.parse("2015-12-25"))
-console.log(a)
-//console.log(a.valueOf(a))
-//console.log(Date.parse())
+var t = new Date(1317772800000)
+console.log(t.valueOf(t))
+console.log(Date.parse("05 October 2011"))
 //console.log(i)
 
 app.get('/api/timestamp/:date_string', (req, res) => {
   var a = req.params.date_string
-  var date = new Date(Date.parse(a))
-  res.json(date)
+  console.log(a, typeof a)
+  //var date = new Date(Date.parse(a))
+  //res.json(date)
 })
 
 app.listen(process.env.PORT || 8080)
