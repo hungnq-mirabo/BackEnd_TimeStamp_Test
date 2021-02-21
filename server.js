@@ -13,10 +13,10 @@ app.route('/')
 app.use('/assets',express.static('assets'))
 
 app.get('/api/timestamp/', (req, res) => {
-  let today = new Date()
+  let date = new Date()
   res.json({
-    "unix":today.getTime(),
-    "utc":today.toUTCString()})
+    unix:date.getTime(),
+    utc:date.toUTCString()})
 })
 
 // If str is date_string => Date.parse(str)
@@ -28,24 +28,21 @@ app.get('/api/timestamp/:date_string', (req, res) => {
   let regex_unix = /\d{5,}/;
   
   if (parseInt(date_string) > 10000) {
-    let date_Unix = new Date(parseInt(date_string));
-    let date_UTC = new Date(date_Unix).toUTCString();  
+    let date = new Date(parseInt(date_string)); 
     res.json({
-      "unix":date_Unix.getTime(),
-      "utc":date_Unix.toUTCString()
+      unix:date.getTime(),
+      utc:date.toUTCString()
     })
-  } 
-  else {
-    let date = new Date(date_string)
-    console.log(date.toString() === "Invalid Date")
-    if (date.toString() !== "Invalid Date") {
-      let date_Unix = date.valueOf();
-      let date_UTC = date.toUTCString();
-      res.json({"unix":date_Unix,"utc":date_UTC})
-    }
-    else {
-      res.json({ error : "Invalid Date" })
-    }
+  }
+  
+  let date = new Date(date_string)
+  if (date.toString() == "Invalid Date") {
+    res.json({ error : "Invalid Date" })
+  } else {
+    res.json({
+      unix:date.getTime(),
+      utc:date.toUTCString()
+    })
   }
 })
 
