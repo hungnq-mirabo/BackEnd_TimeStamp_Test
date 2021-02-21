@@ -13,11 +13,10 @@ app.route('/')
 app.use('/assets',express.static('assets'))
 
 app.get('/api/timestamp/', (req, res) => {
-/*  let today = new Date()
-  let date_UTC = today.toUTCString();
-  let date_Unix = today.valueOf();
-  res.json({"unix":date_Unix,"utc":date_UTC}) */
-  res.json({ unix: Date.now(), utc: Date() });
+  let today = new Date()
+  res.json({
+    "unix":today.getTime(),
+    "utc":today.toUTCString()})
 })
 
 // If str is date_string => Date.parse(str)
@@ -26,13 +25,15 @@ app.get('/api/timestamp/', (req, res) => {
 
 app.get('/api/timestamp/:date_string', (req, res) => {
   var date_string = req.params.date_string;
-  let regex_date = /^(\d{4})-(\d{2})-(\d{2})/;
   let regex_unix = /\d{5,}/;
   
-  if (regex_unix.test(date_string)) {
-    let date_Unix = parseInt(date_string);
+  if (parseInt(date_string) > 10000) {
+    let date_Unix = new Date(parseInt(date_string));
     let date_UTC = new Date(date_Unix).toUTCString();  
-    res.json({"unix":date_Unix,"utc":date_UTC})
+    res.json({
+      "unix":date_Unix.getTime(),
+      "utc":date_Unix.toUTCString()
+    })
   } 
   else {
     let date = new Date(date_string)
